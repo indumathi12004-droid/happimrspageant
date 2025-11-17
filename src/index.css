@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer utilities {
+  .gradient-brand {
+    background: linear-gradient(135deg, #00B8E6 0%, #8B4DFF 100%);
+  }
+
+  .gradient-bg-dark {
+    background: linear-gradient(180deg, #060B2A 0%, #0C1447 100%);
+  }
+
+  .gradient-bg-navy {
+    background: linear-gradient(180deg, #060B2A 0%, #0B113F 100%);
+  }
+
+  .gradient-bg-indigo {
+    background: linear-gradient(180deg, #050A20 0%, #1A1450 100%);
+  }
+
+  .gradient-bg-deep {
+    background: linear-gradient(180deg, #070C2F 0%, #151C4E 100%);
+  }
+
+  .gradient-bg-footer {
+    background: linear-gradient(180deg, #060B2A 0%, #1B0C44 100%);
+  }
+
+  .text-silver {
+    color: #D1D5E0;
+  }
+
+  .border-gradient {
+    border: 2px solid transparent;
+    background-image: linear-gradient(#060B2A, #060B2A), linear-gradient(135deg, #00B8E6, #8B4DFF);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  .glow-aqua-violet {
+    text-shadow: 0 0 20px rgba(0, 184, 230, 0.5), 0 0 40px rgba(139, 77, 255, 0.3);
+  }
+
+  .hover-glow {
+    transition: all 0.3s ease;
+  }
+
+  .hover-glow:hover {
+    text-shadow: 0 0 20px rgba(0, 184, 230, 0.8), 0 0 40px rgba(139, 77, 255, 0.6);
+  }
+
+  .animate-fade-up {
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+}

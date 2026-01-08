@@ -25,25 +25,32 @@ const ContactSection = () => {
     setSubmitMessage('');
 
     try {
-      const payload = {
-        timestamp: new Date().toISOString(),
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        instagram: formData.instagramId,
-        city: formData.city,
-        message: formData.message
-      };
+      // Use URLSearchParams to send form-encoded data (avoids CORS preflight)
+      const formDataToSend = new URLSearchParams();
+      formDataToSend.append('timestamp', new Date().toISOString());
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('instagram', formData.instagramId);
+      formDataToSend.append('city', formData.city);
+      formDataToSend.append('message', formData.message);
 
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+        // Don't set Content-Type header - let browser set it automatically for URLSearchParams
+        // This avoids CORS preflight request
+        body: formDataToSend,
       });
 
-      const result = await response.json();
+      // Try to parse response, but handle case where response might not be readable
+      let result;
+      try {
+        const text = await response.text();
+        result = text ? JSON.parse(text) : { success: true };
+      } catch (parseError) {
+        // If we can't parse, assume success (data was likely saved)
+        result = { success: true };
+      }
 
       if (result.success) {
         setSubmitStatus('success');

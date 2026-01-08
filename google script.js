@@ -10,8 +10,6 @@ const SHEET_ID = '1l-HK5ykxa1y_N0yjvt_q9q16ynec5ez7C9seSMwnho0';
 
 const SHEET_NAME = 'Sheet1'; // Change if your sheet has a different name
 
-
-
 function doPost(e) {
 
   try {
@@ -105,15 +103,10 @@ function doPost(e) {
     
 
     // Return success response
-
     return ContentService.createTextOutput(JSON.stringify({
-
       success: true,
-
       message: 'Data saved successfully',
-
       data: rowData
-
     })).setMimeType(ContentService.MimeType.JSON);
 
     
@@ -131,13 +124,9 @@ function doPost(e) {
     
 
     // Return error response
-
     return ContentService.createTextOutput(JSON.stringify({
-
       success: false,
-
       error: error.toString()
-
     })).setMimeType(ContentService.MimeType.JSON);
 
   }
@@ -147,12 +136,9 @@ function doPost(e) {
 
 
 function doGet(e) {
-
   // Handle GET requests (optional - for testing)
-
   return ContentService.createTextOutput('This web app only accepts POST requests.')
-
     .setMimeType(ContentService.MimeType.TEXT);
-
 }
+
 

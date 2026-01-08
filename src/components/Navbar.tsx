@@ -41,9 +41,12 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            <button className="px-6 py-2.5 rounded-full gradient-brand text-white font-semibold hover:shadow-lg hover:shadow-[#00B8E6]/50 transition-all duration-300 animate-shimmer">
+            <a
+              href="#contact"
+              className="px-6 py-2.5 rounded-full gradient-brand text-white font-semibold hover:shadow-lg hover:shadow-[#00B8E6]/50 transition-all duration-300 animate-shimmer"
+            >
               Apply Now
-            </button>
+            </a>
           </div>
 
           <button
@@ -66,9 +69,13 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            <button className="w-full px-6 py-2.5 rounded-full gradient-brand text-white font-semibold">
+            <a
+              href="#contact"
+              className="w-full block text-center px-6 py-2.5 rounded-full gradient-brand text-white font-semibold"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
               Apply Now
-            </button>
+            </a>
           </div>
         )}
       </div>

@@ -5,12 +5,69 @@ const ContactSection = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    instagramId: '',
+    city: '',
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submitMessage, setSubmitMessage] = useState('');
+
+  // Replace this URL with your Google Apps Script Web App URL after deployment
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNNWp5NgzimyDuukp_J7uwQQhBlJnhwxtM00k96_3E_zaYTRtg7sgVOaUf01Ym1LbbEQ/exec';
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    setSubmitMessage('');
+
+    try {
+      const payload = {
+        timestamp: new Date().toISOString(),
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        instagram: formData.instagramId,
+        city: formData.city,
+        message: formData.message
+      };
+
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitStatus('success');
+        setSubmitMessage('Application submitted successfully! We will get back to you soon.');
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          instagramId: '',
+          city: '',
+          message: ''
+        });
+      } else {
+        setSubmitStatus('error');
+        setSubmitMessage(result.error || 'Failed to submit application. Please try again.');
+      }
+    } catch (error) {
+      setSubmitStatus('error');
+      setSubmitMessage('An error occurred. Please check your connection and try again.');
+      console.error('Submission error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -61,6 +118,39 @@ const ContactSection = () => {
                 />
               </div>
               <div>
+                <label className="block text-[#D1D5E0] mb-2">Phone Number</label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:border-[#00B8E6] focus:outline-none transition-colors"
+                  placeholder="Your phone number"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-[#D1D5E0] mb-2">Instagram ID</label>
+                <input
+                  type="text"
+                  value={formData.instagramId}
+                  onChange={(e) => setFormData({ ...formData, instagramId: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:border-[#00B8E6] focus:outline-none transition-colors"
+                  placeholder="Your Instagram ID"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-[#D1D5E0] mb-2">City</label>
+                <input
+                  type="text"
+                  value={formData.city}
+                  onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white focus:border-[#00B8E6] focus:outline-none transition-colors"
+                  placeholder="Your city"
+                  required
+                />
+              </div>
+              <div>
                 <label className="block text-[#D1D5E0] mb-2">Message</label>
                 <textarea
                   value={formData.message}
@@ -71,12 +161,32 @@ const ContactSection = () => {
                   required
                 />
               </div>
+              {submitStatus === 'success' && (
+                <div className="p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-300">
+                  {submitMessage}
+                </div>
+              )}
+              {submitStatus === 'error' && (
+                <div className="p-4 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300">
+                  {submitMessage}
+                </div>
+              )}
               <button
                 type="submit"
-                className="w-full px-8 py-4 rounded-full gradient-brand text-white font-semibold hover:shadow-xl hover:shadow-[#00B8E6]/50 transition-all duration-300 flex items-center justify-center"
+                disabled={isSubmitting}
+                className="w-full px-8 py-4 rounded-full gradient-brand text-white font-semibold hover:shadow-xl hover:shadow-[#00B8E6]/50 transition-all duration-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Send className="mr-2" size={20} />
-                Apply Now
+                {isSubmitting ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Submitting...
+                  </>
+                ) : (
+                  <>
+                    <Send className="mr-2" size={20} />
+                    Apply Now
+                  </>
+                )}
               </button>
             </form>
           </div>
